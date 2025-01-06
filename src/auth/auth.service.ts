@@ -1,10 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
+import { AuthJwtPayload } from './types/auth.jwt-payload';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
@@ -14,7 +19,15 @@ export class AuthService {
     if (!isPasswordMatch)
       throw new UnauthorizedException('Invalid credentials');
 
-    delete user.password;
-    return user
+    return {
+      id: user.id,
+    };
+  }
+
+  login(userId: number) {
+    const payload: AuthJwtPayload = {
+      sub: userId,
+    };
+    return this.jwtService.sign(payload);
   }
 }
