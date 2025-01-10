@@ -34,7 +34,6 @@ export class AuthService {
     };
     const token = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, this.refreshTokenConfig);
-
     return {
       id: userId,
       token,
