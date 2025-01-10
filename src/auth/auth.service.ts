@@ -28,18 +28,28 @@ export class AuthService {
     };
   }
 
-  login(userId: number) {
-    const payload: AuthJwtPayload = {
-      sub: userId,
-    };
-    const token = this.jwtService.sign(payload);
-    const refreshToken = this.jwtService.sign(payload, this.refreshTokenConfig);
+  async login(userId: number) {
+    const { accessToken, refreshToken } = await this.generateToken(userId);
     return {
       id: userId,
-      token,
+      accessToken,
       refreshToken,
     };
   }
+  async generateToken(userId: number) {
+    const payload: AuthJwtPayload = {
+      sub: userId,
+    };
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload),
+      this.jwtService.signAsync(payload, this.refreshTokenConfig),
+    ]);
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
   refreshToken(userId: number) {
     const payload: AuthJwtPayload = {
       sub: userId,
