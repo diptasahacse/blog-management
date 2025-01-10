@@ -12,6 +12,14 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async updateHashedRefreshToken(userId: number, hashedRefreshToken: string) {
+    return await this.userRepository.update(
+      { id: userId },
+      {
+        hashedRefreshToken,
+      },
+    );
+  }
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepository.create(createUserDto);
     try {
@@ -42,8 +50,8 @@ export class UsersService {
 
   findOne(id: number) {
     return this.userRepository.findOne({
-      where:{id},
-      select: ["name", "email"]
+      where: { id },
+      select: ['name', 'email', 'hashedRefreshToken'],
     });
   }
 
