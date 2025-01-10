@@ -40,4 +40,14 @@ export class AuthService {
       refreshToken,
     };
   }
+  refreshToken(userId: number) {
+    const payload: AuthJwtPayload = {
+      sub: userId,
+    };
+    const token = this.jwtService.sign(payload);
+    return {
+      id: userId,
+      token,
+    };
+  }
 }
