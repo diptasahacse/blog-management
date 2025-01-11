@@ -87,7 +87,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
     return {
-      id: user.id,
+      id: userId,
     };
   }
 }
