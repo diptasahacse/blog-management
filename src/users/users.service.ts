@@ -51,7 +51,7 @@ export class UsersService {
   findOne(id: number) {
     return this.userRepository.findOne({
       where: { id },
-      select: ['name', 'email', 'hashedRefreshToken'],
+      select: ['name', 'email', 'hashedRefreshToken', 'role'],
     });
   }
 

@@ -6,6 +6,7 @@ import { AuthJwtPayload } from './types/auth.jwt-payload';
 import refreshJwtConfig from './config/refresh.jwt.config';
 import { ConfigType } from '@nestjs/config';
 import * as argon2 from 'argon2';
+import { CurrentUser } from './types/currentUser';
 @Injectable()
 export class AuthService {
   constructor(
@@ -93,5 +94,15 @@ export class AuthService {
     return {
       id: userId,
     };
+  }
+
+  async validateJwtUser(userId: number) {
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new UnauthorizedException('User not found');
+    const currentUser: CurrentUser = {
+      id: user.id,
+      role: user.role,
+    };
+    return currentUser;
   }
 }
