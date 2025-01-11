@@ -70,7 +70,11 @@ export class AuthService {
   }
 
   async logOut(userId: number) {
-    await this.usersService.updateHashedRefreshToken(userId, null);
+    try {
+      return await this.usersService.updateHashedRefreshToken(userId, null);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async validateRefreshToken(userId: number, refreshToken: string) {
