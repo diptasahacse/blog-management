@@ -28,6 +28,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req) {
